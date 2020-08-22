@@ -1,0 +1,39 @@
+{
+  "name": "hi-book-server",
+  "version": "1.2.0",
+  "engines": {
+    "node": "12.x",
+    "npm": "6.x",
+    "yarn": "1.x"
+  },
+  "main": "./src/server.ts",
+  "repository": "https://github.com/ArtGTom/Hi-Book.git",
+  "author": "ArtGTom <artgtom@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
+    "knex:migrate:rollback": "knex --knexfile knexfile.ts migrate:rollback"
+  },
+  "devDependencies": {
+    "@types/aws-sdk": "^2.7.0",
+    "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.7",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/multer": "^1.4.4",
+    "@types/socket.io": "^2.1.11",
+    "ts-node-dev": "^1.0.0-pre.57",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.738.0",
+    "bcrypt": "^5.0.0",
+    "dotenv-safe": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.5",
+    "multer": "^1.4.2",
+    "pg": "^8.0.3",
+    "socket.io": "^2.3.0"
+  }
+}
