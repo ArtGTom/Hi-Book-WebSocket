@@ -1,2 +1,2 @@
 web: npm start
-test: npm test
+migrate: npm knex:migrate
