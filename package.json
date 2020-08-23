@@ -11,8 +11,8 @@
   "author": "ArtGTom <artgtom@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/server.ts --ignore-watch node_modules",
-    "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
+    "start": "ts-node server/server.ts --ignore-watch node_modules",
+    "dev": "tsnd --transpile-only --ignore-watch node_modules --respawn server/server.ts",
     "knex:migrate": "knex --knexfile knexfile.ts migrate:latest",
     "knex:migrate:rollback": "knex --knexfile knexfile.ts migrate:rollback"
   },
