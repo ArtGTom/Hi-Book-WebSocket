@@ -19,7 +19,7 @@ app.get('/books', (request, response) => {
 app.use(express.json());
 
 app.get('/tables', (request, response) => {
-    const tables = db.schema.raw('show tables');
+    const tables = db.schema.raw("SELECT 'table_name' FROM information_schema.tables WHERE table_schema = 'public ORDER BY table_name;");
 
     return response.json(tables);
 } );
