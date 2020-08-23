@@ -1,2 +1,2 @@
-web: node ./src/server.ts
-test: node ./src/testserver.ts
+web: ts-node ./src/server.ts
+test: ts-node ./src/testserver.ts
