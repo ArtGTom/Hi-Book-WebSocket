@@ -1,2 +1,3 @@
-web: npm start
-migrate: npm knex:migrate
+web: npm run start
+migrate: npm run knex:migrate
+rollback: npm run knex:migrate:rollback
