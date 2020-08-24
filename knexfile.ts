@@ -3,7 +3,7 @@ import path from 'path';
 module.exports = {
     client: 'pg',
     connection: {
-        host: 'localhost',
+        host: 'localhosta',
         port: '5432',
         user: 'postgres',
         password: 'joaobanco',
