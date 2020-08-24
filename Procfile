@@ -1,0 +1,1 @@
+web: tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts
