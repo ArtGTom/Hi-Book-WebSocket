@@ -1,34 +1,20 @@
-import { Request } from 'express';
-import { getUserByToken } from '../../utils/JWTAuthentication';
-import { Profile, PutProfile } from '../../models/profile.model';
-import { User } from '../../models/user.model';
+import Profile from '../../models/profile.model';
+import PutProfile from '../../models/profileOperations.model'
+import User from '../../models/user.model';
 import db from '../../database/connection';
 import bCrypt from 'bcrypt';
-import convertUserFromProfile from '../../utils/convertUserFromProfile';
+import { convertFromUser } from '../../utils/convertModelForJSON';
 
-export async function readProfile(request: Request) {
-    const promise = new Promise(async (resolve, reject) => {
+export async function readProfile(user: User) {
+    return new Promise(async (resolve) => {
 
-        await getUserByToken(request)
-            .then((result: any) => {
-                let profile: Profile = convertUserFromProfile(result);
-                resolve(profile);
-            })
-            .catch(err => {
-                reject(err);
-                console.error(err);
-            });
+        let profile: Profile = await convertFromUser(user);
+        resolve(profile);
     });
-
-    return promise;
 }
 
-export async function updateProfile(request: Request) {
-    const promise = new Promise(async (resolve, reject) => {
-        const updateUser: PutProfile = request.body
-    
-        let user: User = await getUserByToken(request)
-                    .catch(err => reject(err)) as User;
+export async function updateProfile(user: User, updateUser: PutProfile) {
+    return new Promise(async (resolve, reject) => {
         
         try {
             if(updateUser.user != '' && updateUser.user != undefined)
@@ -37,6 +23,8 @@ export async function updateProfile(request: Request) {
                 user.nm_username = updateUser.username as string;
             if(updateUser.biography != '' && updateUser.biography != undefined)
                 user.ds_biography = updateUser.biography as string;
+            if((updateUser.status == 1 || updateUser.status == 2) && updateUser.status  != undefined)
+                user.cd_status_user = updateUser.status as number;
             if(updateUser.phone != '' && updateUser.phone != undefined)
                 user.cd_phone_number = updateUser.phone as string;
             if(updateUser.email != '' && updateUser.email != undefined)
@@ -53,25 +41,16 @@ export async function updateProfile(request: Request) {
                 console.error(err);
             });
 
-        let response = convertUserFromProfile(user);
+        let response = await convertFromUser(user);
 
         resolve(response);
     });
-
-    return promise;
 }
 
-export async function putPassword(request: Request) {
-    const promise = new Promise(async (resolve, reject) => {
-        // Armazeno as informações enviadas na request
-        const putPassword: {
-            password: string,
-            newPassword: string
-        } = request.body;
-
-        // Encontro o user pelo token
-        const user: User = await getUserByToken(request).catch(err => reject(err)) as User;
-
+export async function putPassword(putPassword: { password: string, newPassword: string }, user: User) {
+    
+    return new Promise(async (resolve, reject) => {
+    
         // Busco no banco o hash da senha do usuario
         const userPasswordEncrypted = await db('tb_user')
                                         .select('tb_user.cd_password_hash')
@@ -105,6 +84,4 @@ export async function putPassword(request: Request) {
             }
         });
     });
-
-    return promise;
 }
