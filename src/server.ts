@@ -4,6 +4,7 @@ import io from 'socket.io';
 import routes from './http/routes';
 import { DeleteObjectRequest } from 'aws-sdk/clients/s3';
 import AWS from 'aws-sdk';
+import getStatusById from './utils/getStatusById';
 
 const app = express();
 const server = http.createServer(app);

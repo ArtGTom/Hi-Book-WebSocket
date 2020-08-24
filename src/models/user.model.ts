@@ -5,6 +5,7 @@ export default interface User {
     nm_email_user: string,
     ds_biography: string,
     cd_phone_number: string,
-    cd_user_icon_URL: string
+    cd_user_icon_URL: string,
+    cd_status_user: number
 }    
 

@@ -12,7 +12,7 @@ export async function up(knex: Knex) {
         table.text('cd_user_icon_URL'); 
         
         table.integer('cd_geolocation');
-        table.integer('cd_status_user');
+        table.integer('cd_status_user').notNullable();
 
         table.foreign('cd_geolocation').references('cd_geolocation').inTable('tb_geolocation');
         table.foreign('cd_status_user').references('cd_status_user').inTable('tb_status_user');

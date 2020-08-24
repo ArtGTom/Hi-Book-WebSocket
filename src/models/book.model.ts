@@ -4,4 +4,5 @@ export default interface Book {
     nm_writer: string,
     nm_publisher: string,
     ds_book_description: string,
+    cd_status_book: number
 }

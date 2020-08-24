@@ -6,7 +6,7 @@ import CreateUser from '../models/userOperations.model';
 import { NewBook, PutBook } from '../models/bookOperations.mode';
 import { verifyToken, getUserByToken } from '../utils/JWTAuthentication';
 import { uploadImageProfile } from './services/aws.service';
-import { Login, Register} from './services/auth.service';
+import { Login, Register } from './services/auth.service';
 import { updateProfile, readProfile, putPassword } from './services/profile.service';
 import { createBook, readBooks, updateBook, deleteBook, readBook } from './services/book.service';
 
@@ -24,8 +24,8 @@ routes.post('/users', async (request, response) => {
 });
 
 routes.post('/login', async (request, response) => {
-    let credentials: {login: string, password: string} = request.body;
-    
+    let credentials: { login: string, password: string } = request.body;
+
     Login(credentials)
         .then(result => response.status(200).json(result))
         .catch(reject => response.status(400).json(reject));
@@ -35,16 +35,18 @@ routes.post('/login', async (request, response) => {
 
 routes.get('/profile', verifyToken, async (request, response) => {
     const user: User = await getUserByToken(request, response);
+    console.log(user);
 
     readProfile(user)
         .then(result => response.status(200).json(result))
-        .catch(err => response.status(400). json(err))
+        .catch(err => response.status(400).json(err))
 });
 
-routes.post('/profile', verifyToken, images.single('image'), async (request,response) => {
-    const user:User = await getUserByToken(request, response);
+routes.post('/profile', verifyToken, images.single('image'), async (request, response) => {
+    const user: User = await getUserByToken(request, response);
     const image = request.file;
 
+    
     uploadImageProfile(user, image)
         .then(result => response.status(200).json(result))
         .catch(err => response.status(400).json(err));
@@ -54,6 +56,7 @@ routes.put('/profile', verifyToken, async (request, response) => {
     const user = await getUserByToken(request, response);
     const putProfile: PutProfile = request.body;
 
+    
     updateProfile(user, putProfile)
         .then(result => response.status(200).json(result))
         .catch(err => response.status(400).json(err));
@@ -62,12 +65,13 @@ routes.put('/profile', verifyToken, async (request, response) => {
 routes.patch('/profile', verifyToken, async (request, response) => {
     const user: User = await getUserByToken(request, response);
 
-    const password: 
-    {
-        password: string, 
-        newPassword: string
-    } = request.body;
+    const password:
+        {
+            password: string,
+            newPassword: string
+        } = request.body;
 
+    
     putPassword(password, user)
         .then(result => response.status(200).json(result))
         .catch(err => response.status(400).json(err));
@@ -95,6 +99,7 @@ routes.post('/books', verifyToken, async (request, response) => {
     const user: User = await getUserByToken(request, response);
     const newBook: NewBook = request.body;
 
+    
     createBook(user, newBook)
         .then(result => response.status(201).json(result))
         .catch(err => response.status(400).json(err));

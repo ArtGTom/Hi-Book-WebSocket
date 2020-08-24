@@ -1,16 +1,14 @@
-import { Request } from 'express';
-import { getUserByToken } from '../../utils/JWTAuthentication';
 import Profile from '../../models/profile.model';
 import PutProfile from '../../models/profileOperations.model'
-import  User  from '../../models/user.model';
+import User from '../../models/user.model';
 import db from '../../database/connection';
 import bCrypt from 'bcrypt';
-import { convertUserFromProfile } from '../../utils/convertModelForJSON';
+import { convertFromUser } from '../../utils/convertModelForJSON';
 
 export async function readProfile(user: User) {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
 
-        let profile: Profile = convertUserFromProfile(user);
+        let profile: Profile = await convertFromUser(user);
         resolve(profile);
     });
 }
@@ -25,6 +23,8 @@ export async function updateProfile(user: User, updateUser: PutProfile) {
                 user.nm_username = updateUser.username as string;
             if(updateUser.biography != '' && updateUser.biography != undefined)
                 user.ds_biography = updateUser.biography as string;
+            if((updateUser.status == 1 || updateUser.status == 2) && updateUser.status  != undefined)
+                user.cd_status_user = updateUser.status as number;
             if(updateUser.phone != '' && updateUser.phone != undefined)
                 user.cd_phone_number = updateUser.phone as string;
             if(updateUser.email != '' && updateUser.email != undefined)
@@ -41,7 +41,7 @@ export async function updateProfile(user: User, updateUser: PutProfile) {
                 console.error(err);
             });
 
-        let response = convertUserFromProfile(user);
+        let response = await convertFromUser(user);
 
         resolve(response);
     });

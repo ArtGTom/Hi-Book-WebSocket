@@ -18,22 +18,30 @@ export async function Register(user: CreateUser) {
                 .then(hash => passwordHash = hash)
                 .catch(e => console.error(e));
 
-            await db('tb_user').insert({
-                nm_user: user.user,
-                nm_username: user.username,
-                cd_password_hash: passwordHash,
-                nm_email_user: user.email,
-                ds_biography: user.biography
-            })
-                .catch(e=> {reject({message: 'Erro inesperado ao efetuar o cadastro. Tente novamente mais tarde.'});
-                            console.error(e)});
+            const trx = await db.transaction();
 
-            const ids = await db('tb_user').select('tb_user.cd_user')
-                            .where('tb_user.nm_username', '=', user.username);
+            const insertedUserIds = 
+                await trx('tb_user').insert({
+                    nm_user: user.user,
+                    nm_username: user.username,
+                    cd_password_hash: passwordHash,
+                    nm_email_user: user.email,
+                    ds_biography: user.biography,
+                    cd_status_user: 1
+                }).returning('tb_user.cd_user');
+
+            trx.commit()
+                .catch(err => {
+                    reject({message: 'Erro inesperado ao cadastrar o novo usuário. Tente novamente mais tarde', status: 400});
+                    console.error(err);
+                    trx.rollback();
+                })
+            
+            const token = await GenerateToken(insertedUserIds[0]);
 
             resolve ({
                 message: 'Cadastro efetuado com sucesso',
-                token: await GenerateToken(ids[0].cd_user)
+                token
             });
         } else 
             reject({message: 'Login e/ou email não disponíveis!'});
@@ -61,7 +69,7 @@ export async function Login(credentials: {login: string, password: string}) {
             
             // Verifica se o login e a senha estão corretos
             if((user[0].nm_username == credentials.login || user[0].nm_email_user) && passwordIsValid) {
-                let token = await GenerateToken(user[0].cd_user);
+                const token = await GenerateToken(user[0].cd_user);
                 resolve({token});
             } else 
                 reject({message: 'Credenciais inválidas!'});
