@@ -2,7 +2,6 @@ import Knex from 'knex';
 
 export async function up(knex: Knex) {
     return knex.schema.createTable('item_user_book', table => {
-        table.integer('cd_amount').notNullable();
 
         table.integer('cd_user').notNullable();
         table.integer('cd_book').notNullable();

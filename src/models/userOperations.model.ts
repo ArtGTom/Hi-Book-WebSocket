@@ -1,8 +1,7 @@
-export default interface Profile {
+export default interface CreateUser {
     user: string,
     username: string,
     email: string,
-    image: string,
+    password: string,
     biography: string,
-    phone: string
 }

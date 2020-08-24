@@ -8,9 +8,8 @@ import db from '../../database/connection';
 /* Instancia o service da AWS */
 const s3 = new AWS.S3();
 
-export async function uploadImageProfile(request: Request) {
+export async function uploadImageProfile( user: User, image: Express.Multer.File) {
     const promise = new Promise(async (resolve, reject) => {
-        const image = request.file;
 
         if(image) {
             let type = '';
@@ -21,9 +20,6 @@ export async function uploadImageProfile(request: Request) {
                 type = '.jpg'
             else
                 reject({message: 'Formato de arquivo não suportados. Tente com uma imagem png ou jpg'});
-            
-            // Identifica o user através do token
-            const user: User = await getUserByToken(request).catch(err => {return err}) as User;
             
             // Gera o nome do arquivo e o link que o arquivo será disponibilizado
             const fileName: string = genNameFile(user, type);

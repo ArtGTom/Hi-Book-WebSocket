@@ -8,7 +8,7 @@ export async function up(knex: Knex) {
         table.string('nm_publisher').notNullable();
         table.text('ds_book_description').notNullable();
         
-        table.integer('cd_status_book').notNullable();
+        table.integer('cd_status_book')
         
         table.foreign('cd_status_book').references('cd_status_book').inTable('tb_status_book');
     });
