@@ -1,6 +1,4 @@
-import Knex from 'knex';
-
-export async function up(knex: Knex) {
+exports.up = function(knex) {
     const status = 
     [
         {
@@ -20,6 +18,6 @@ export async function up(knex: Knex) {
     return knex.insert(status).into('tb_status_book')
 }
 
-export async function down(knex: Knex) {
+exports.down = function(knex) {
     return knex.delete().from('tb_status_book');
 }
