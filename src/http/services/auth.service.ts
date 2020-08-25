@@ -1,7 +1,7 @@
-import db from './../../database/connection';
-import {GenerateToken} from './../../utils/JWTAuthentication';
+import db from '../../database/connection';
+import {GenerateToken} from '../../utils/JWTAuthentication';
 import bcrypt from 'bcrypt';
-import CreateUser from './../../models/userOperations.model';
+import CreateUser from '../../models/userOperations.model';
 
 
 export async function Register(user: CreateUser) {

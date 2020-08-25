@@ -1,8 +1,6 @@
 import AWS from 'aws-sdk';
-import { PutObjectRequest, DeleteObjectRequest } from 'aws-sdk/clients/s3';
-import { Request } from 'express';
-import { getUserByToken } from '../../utils/JWTAuthentication';
-import { User } from '../../models/user.model';
+import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import User from '../../models/user.model';
 import db from '../../database/connection';
 
 /* Instancia o service da AWS */
