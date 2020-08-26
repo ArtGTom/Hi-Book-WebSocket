@@ -5,6 +5,9 @@ import { ViewBook } from "../models/bookOperations.mode";
 import { getStatusUserById, getStatusBookById } from "./getStatusById";
 import statusUserView from "../models/statusUserView.model";
 import statusBookView from "../models/statusBookView.model";
+import ImageBook from "../models/imageBook.model";
+import { ViewImageBook } from "../models/imageBookOperations.model";
+import { getImagesByBook } from "./getImagesByBooks";
 
 export async function convertFromUser(model: User): Promise<Profile> {
     const status: statusUserView = await getStatusUserById(model.cd_status_user);
@@ -23,8 +26,19 @@ export async function convertFromUser(model: User): Promise<Profile> {
     });
 }
 
+export function convertFromImageBook(model: ImageBook) {
+    const imageBook: ViewImageBook = {
+        id: model.cd_image_book,
+        image: model.cd_image_URL,
+        description: model.ds_image
+    }
+
+    return imageBook;
+}
+
 export async function convertFromBook(model: Book): Promise<ViewBook> {
     const status: statusBookView = await getStatusBookById(model.cd_status_book);
+    const images: Array<ViewImageBook> = await getImagesByBook(model);
 
     return new Promise((resolve) => {
         const bookResponse: ViewBook = {
@@ -33,7 +47,8 @@ export async function convertFromBook(model: Book): Promise<ViewBook> {
             writer: model.nm_writer,
             publisher: model.nm_publisher,
             description: model.ds_book_description,
-            status
+            status,
+            images
         }
         resolve(bookResponse);
     })

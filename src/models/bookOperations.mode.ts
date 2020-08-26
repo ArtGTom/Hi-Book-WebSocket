@@ -1,8 +1,5 @@
 import statusBookView from "./statusBookView.model";
-
-export interface BookInterface {
-    
-}
+import { ViewImageBook } from "./imageBookOperations.model";
 
 export interface NewBook {
     name: string,
@@ -18,7 +15,8 @@ export interface ViewBook {
     writer: string,
     publisher: string,
     description: string,
-    status: statusBookView
+    status: statusBookView,
+    images: Array<ViewImageBook>
 }
 
 export interface PutBook {

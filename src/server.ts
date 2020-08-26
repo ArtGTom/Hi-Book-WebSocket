@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const socketIo = io(server);
 
-const listenPort = process.env.PORT || 3000;
+const listenPort = process.env.PORT || 4242;
 
 /* CARREGA AS VARIAVEIS DE AMBIENTE */
 require('dotenv-safe').config();
@@ -16,8 +16,6 @@ require('./aws/bucket');
 app.use(express.json());
 app.use(routes);
 
-console.log('rodando');
-
 app.listen(listenPort, () => {
-    console.log('---------------------RODANDO---------------------');
+    console.log(`---------------------RODANDO NA PORTA ${listenPort}---------------------`);
 });

@@ -8,8 +8,10 @@ export async function up(knex: Knex) {
         table.string('nm_publisher').notNullable();
         table.text('ds_book_description').notNullable();
         
+        table.integer('cd_user').notNullable();
         table.integer('cd_status_book').notNullable();
         
+        table.foreign('cd_user').references('cd_user').inTable('tb_user');
         table.foreign('cd_status_book').references('cd_status_book').inTable('tb_status_book');
     });
 }
