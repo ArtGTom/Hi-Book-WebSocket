@@ -1,15 +1,7 @@
-<<<<<<< HEAD
 import db from './../../database/connection';
 import {GenerateToken} from './../../utils/JWTAuthentication';
 import bcrypt from 'bcrypt';
 import CreateUser from './../../models/userOperations.model';
-=======
-import db from '../../database/connection';
-import {GenerateToken} from '../../utils/JWTAuthentication';
-import bcrypt from 'bcrypt';
-import CreateUser from '../../models/userOperations.model';
->>>>>>> 5db90d4c8a4755ae3ebf9435fa9a20ba379729b0
-
 
 export async function Register(user: CreateUser) {
 
