@@ -55,7 +55,6 @@ routes.put('/profile', verifyToken, async (request, response) => {
     const user = await getUserByToken(request, response);
     const putProfile: PutProfile = request.body;
 
-
     updateProfile(user, putProfile)
         .then(result => response.status(200).json(result))
         .catch(err => response.status(400).json(err));
@@ -69,7 +68,6 @@ routes.patch('/profile', verifyToken, async (request, response) => {
             password: string,
             newPassword: string
         } = request.body;
-
 
     putPassword(password, user)
         .then(result => response.status(200).json(result))
@@ -98,7 +96,6 @@ routes.get('/books/:idBook', verifyToken, async (request, response) => {
 routes.post('/books', verifyToken, async (request, response) => {
     const user: User = await getUserByToken(request, response);
     const newBook: NewBook = request.body;
-
 
     createBook(user, newBook)
         .then(result => response.status(201).json(result))
