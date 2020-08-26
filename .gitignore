@@ -20,11 +20,7 @@
 
 npm-debug.log*
 yarn-debug.log*
-<<<<<<< HEAD
 yarn-error.log*
 
 knexfile.ts
 /src/database/connection.ts
-=======
-yarn-error.log*
->>>>>>> 5db90d4c8a4755ae3ebf9435fa9a20ba379729b0
