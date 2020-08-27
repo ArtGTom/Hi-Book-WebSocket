@@ -17,5 +17,5 @@ app.use(express.json());
 app.use(routes);
 
 app.listen(listenPort, () => {
-    console.log(`---------------------RODANDO NA PORTA ${listenPort}---------------------`);
+    console.log(`---------------------RODANDO NA PORTA ${listenPort}--------------------- ${process.env.PG_CONNECTION_STRING}`);
 });
