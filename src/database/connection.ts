@@ -1,12 +1,19 @@
 import knex from 'knex';
 
 var db: knex<any | unknown> | null = null;
+
+db = knex({
+    client: 'pg',
+    connection: process.env.PG_CONNECTION_STRING
+});
+/*
 if(process.env.MODE == 'production') {
     db = knex({
         client: 'pg',
         connection: process.env.PG_CONNECTION_STRING
     });
-} else {
+} 
+else {
     db = knex({
         client: 'pg',
         connection: {
@@ -18,5 +25,5 @@ if(process.env.MODE == 'production') {
         }
     })
 }
-
+*/
 export default db as knex<any | unknown>;
