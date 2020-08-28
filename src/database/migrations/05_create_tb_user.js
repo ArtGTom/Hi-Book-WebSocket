@@ -11,9 +11,11 @@ exports.up = function(knex) {
         
         table.integer('cd_geolocation');
         table.integer('cd_status_user').notNullable();
+        table.integer('cd_cidade').notNullable();
 
         table.foreign('cd_geolocation').references('cd_geolocation').inTable('tb_geolocation');
         table.foreign('cd_status_user').references('cd_status_user').inTable('tb_status_user');
+        table.foreign('cd_cidade').references('cd_cidade').inTable('tb_cidade');
     });
 }
 
