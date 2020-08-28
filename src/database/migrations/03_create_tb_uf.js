@@ -1,7 +1,7 @@
 exports.up = function(knex) {
     return knex.schema.createTable('tb_uf', table => {
         table.increments('cd_uf').primary();
-        table.char('sg_uf', 2);
+        table.string('sg_uf', 3).notNullable();
         table.string('nm_uf', 45).notNullable();
     });
 }
