@@ -19,15 +19,24 @@ export async function Register(user: CreateUser) {
 
             const trx = await db.transaction();
 
+            const insertedGeolocationIds =
+                await trx('tb_geolocation as g').insert({
+                    cd_latitude: user.geolocation.latitude,
+                    cd_longitude: user.geolocation.longitude
+                }).returning('g.cd_geolocation');
+
+            const geolocation_id = insertedGeolocationIds[0];
+
             const insertedUserIds = 
-                await trx('tb_user').insert({
+                await trx('tb_user as u').insert({
                     nm_user: user.user,
                     nm_username: user.username,
                     cd_password_hash: passwordHash,
                     nm_email_user: user.email,
                     ds_biography: user.biography,
-                    cd_status_user: 1
-                }).returning('tb_user.cd_user');
+                    cd_status_user: 1,
+                    cd_geolocation: geolocation_id
+                }).returning('u.cd_user');
 
             trx.commit()
                 .catch(err => {

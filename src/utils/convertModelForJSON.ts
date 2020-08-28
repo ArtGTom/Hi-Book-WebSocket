@@ -1,6 +1,7 @@
 import  User  from "../models/user.model";
 import  Profile  from "../models/profile.model";
 import Book from "../models/book.model";
+import db from "../database/connection";
 import { ViewBook } from "../models/bookOperations.mode";
 import { getStatusUserById, getStatusBookById } from "./getStatusById";
 import statusUserView from "../models/statusUserView.model";
@@ -8,10 +9,17 @@ import statusBookView from "../models/statusBookView.model";
 import ImageBook from "../models/imageBook.model";
 import { ViewImageBook } from "../models/imageBookOperations.model";
 import { getImagesByBook } from "./getImagesByBooks";
+import Geolocation from '../models/geolocation.model';
+import { ViewGeolocation } from "../models/geolocationOperations.model";
 
 export async function convertFromUser(model: User): Promise<Profile> {
+    
     const status: statusUserView = await getStatusUserById(model.cd_status_user);
-    console.log(status);
+    const geolocation: Array<Geolocation> = 
+        await db('tb_geolocation as g')
+            .select('*')
+            .where('g.cd_geolocation', '=', model.cd_geolocation);
+
     return new Promise((resolve) => {
         const userResponse: Profile = {
             user: model.nm_user,
@@ -20,7 +28,11 @@ export async function convertFromUser(model: User): Promise<Profile> {
             image: model.cd_user_icon_URL,
             biography: model.ds_biography,
             phone: model.cd_phone_number,
-            status: status
+            status,
+            geolocation: {
+                latitude: geolocation[0].cd_latitude,
+                longitude: geolocation[0].cd_longitude
+            }
         }
         resolve(userResponse);
     });
@@ -52,4 +64,13 @@ export async function convertFromBook(model: Book): Promise<ViewBook> {
         }
         resolve(bookResponse);
     })
+}
+
+export function convertFromGeolocation(model: Geolocation): ViewGeolocation {
+    const geolocation: ViewGeolocation = {
+        latitude: model.cd_latitude,
+        longitude: model.cd_longitude
+    }
+
+    return geolocation;
 }

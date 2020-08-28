@@ -10,12 +10,13 @@ import { Login, Register } from './services/auth.service';
 import { updateProfile, readProfile, putPassword } from './services/profile.service';
 import { createBook, readBooks, updateBook, deleteBook, readBook } from './services/book.service';
 import { NewImageBook } from '../models/imageBookOperations.model';
+import { updateGeolocation, readGeolocation } from './services/geolocation.service';
+import { NewGeolocation } from '../models/geolocationOperations.model';
 
 const routes = express.Router();
 const formData = multer();
 
 /* Autenticação */
-
 routes.post('/users', async (request, response) => {
     let user: CreateUser = request.body;
 
@@ -33,7 +34,6 @@ routes.post('/login', async (request, response) => {
 });
 
 /* Profile */
-
 routes.get('/profile', verifyToken, async (request, response) => {
     const user: User = await getUserByToken(request, response);
 
@@ -74,8 +74,7 @@ routes.patch('/profile', verifyToken, async (request, response) => {
         .catch(err => response.status(400).json(err));
 });
 
-/* BOOKS */
-
+/* Books */
 routes.get('/books', verifyToken, async (request, response) => {
     const user: User = await getUserByToken(request, response);
     const ownerBook: string | undefined = request.query['ownerBook']?.toString();
@@ -121,8 +120,7 @@ routes.delete('/books/:idBook', verifyToken, async (request, response) => {
         .catch(error => response.status(error.status).json(error));
 });
 
-/* IMAGES BOOK */
-
+/* Images book */
 routes.post('/books/:idBook/images', verifyToken, formData.single('image'), async (request, response) => {
     const user: User = await getUserByToken(request, response);
     const idBook = request.params['idBook'];
@@ -146,6 +144,23 @@ routes.delete('/books/:idBook/images/:idImage', verifyToken, async (request, res
     const idImage = request.params['idImage'];
 
     deleteImageBook(user, idBook, idImage)
+        .then(result => response.status(200).json(result))
+        .catch(error => response.status(error.status).json(error));
+});
+
+/* Geolocation */
+routes.get('/geolocation', verifyToken, async (request, response) => {
+    const user: User = await getUserByToken(request, response);
+
+    readGeolocation(user)
+        .then(result => response.status(200).json(result));
+});
+
+routes.put('/geolocation', verifyToken, async (request, response) => {
+    const user: User = await getUserByToken(request, response);
+    const newGeolocation: NewGeolocation = request.body;
+
+    updateGeolocation(user, newGeolocation)
         .then(result => response.status(200).json(result))
         .catch(error => response.status(error.status).json(error));
 });

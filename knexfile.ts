@@ -1,6 +1,7 @@
 import path from 'path';
 
 if(process.env.MODE == 'production') {
+    console.log('passoaq')
     module.exports = {
         client: 'pg',
         connection: process.env.PG_CONNECTION_STRING,
@@ -9,7 +10,7 @@ if(process.env.MODE == 'production') {
         },
     };
 } else {
-    
+    console.log('passoaq2')
 module.exports = {
     client: 'pg',
     connection: {

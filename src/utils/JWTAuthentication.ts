@@ -36,14 +36,12 @@ export function getUserByToken(request: Request, response: Response): Promise<Us
         const user =
             await db('tb_user')
                 .select('tb_user.cd_user', 'tb_user.nm_user', 'tb_user.nm_username', 'tb_user.nm_email_user',
-                    'tb_user.cd_user_icon_URL', 'tb_user.ds_biography', 'tb_user.cd_phone_number', 'tb_user.cd_status_user')
+                    'tb_user.cd_user_icon_URL', 'tb_user.ds_biography', 'tb_user.cd_phone_number', 'tb_user.cd_status_user', 'tb_user.cd_geolocation')
                 .where('tb_user.cd_user', '=', decoded.idUser);
                 
             if(user[0])
                 resolve(user[0] as User);
             else
                 response.status(409).json({ message: 'Houve um problema de autenticação. Renove seu token.' })
-            
-            
     });
 }
