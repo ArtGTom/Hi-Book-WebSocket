@@ -11,15 +11,26 @@ import { ViewImageBook } from "../models/imageBookOperations.model";
 import { getImagesByBook } from "./getImagesByBooks";
 import Geolocation from '../models/geolocation.model';
 import { ViewGeolocation } from "../models/geolocationOperations.model";
+import City from "../models/city.model";
+import { ViewCity } from "../models/cityOperations.model";
+import UF from "../models/uf.model";
 
 export async function convertFromUser(model: User): Promise<Profile> {
     
     const status: statusUserView = await getStatusUserById(model.cd_status_user);
-    const geolocation: Array<Geolocation> = 
+    const geolocationSearch: Array<Geolocation> = 
         await db('tb_geolocation as g')
             .select('*')
             .where('g.cd_geolocation', '=', model.cd_geolocation);
+    
+    const citySearch: Array<City> =
+        await db('tb_city as c')
+            .select('*')
+            .where('c.cd_city', '=', model.cd_city);
 
+    const geolocation: ViewGeolocation = convertFromGeolocation(geolocationSearch[0])
+    const city: ViewCity = await convertFromCity(citySearch[0]);
+    
     return new Promise((resolve) => {
         const userResponse: Profile = {
             user: model.nm_user,
@@ -29,10 +40,8 @@ export async function convertFromUser(model: User): Promise<Profile> {
             biography: model.ds_biography,
             phone: model.cd_phone_number,
             status,
-            geolocation: {
-                latitude: geolocation[0].cd_latitude,
-                longitude: geolocation[0].cd_longitude
-            }
+            city,
+            geolocation,
         }
         resolve(userResponse);
     });
@@ -73,4 +82,22 @@ export function convertFromGeolocation(model: Geolocation): ViewGeolocation {
     }
 
     return geolocation;
+}
+
+export async function convertFromCity(model: City) {
+    const uf: Array<UF> =
+        await db('tb_uf as u')
+            .select()
+            .where('u.cd_uf', '=', model.cd_uf);
+
+    const city: ViewCity = {
+        id: model.cd_city,
+        name: model.nm_city.replace(/\b\w/g, l => l.toUpperCase()),
+        uf: {
+            abbreviation: uf[0].sg_uf,
+            name: uf[0].nm_uf
+        }
+    }
+
+    return city;
 }

@@ -1,4 +1,4 @@
-export default function haversine(latitudeUm: number, longitudeUm: number, latitudeDois: number, longitudeDois: number) {
+export default function haversine(latitudeUm: number, longitudeUm: number, latitudeDois: number, longitudeDois: number): number {
     
     const distanceLat = (latitudeDois - latitudeUm) * (Math.PI/180);
     const distanceLon = (longitudeDois - longitudeUm) * (Math.PI/180);
@@ -16,5 +16,5 @@ export default function haversine(latitudeUm: number, longitudeUm: number, latit
 
     const distance = worldRadius * haversine2;
 
-    return distance.toPrecision(3);
+    return parseFloat(distance.toPrecision(3));
 }

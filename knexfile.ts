@@ -1,6 +1,5 @@
 import path from 'path';
 
- 
 module.exports = {
     production: {
         client: 'pg',

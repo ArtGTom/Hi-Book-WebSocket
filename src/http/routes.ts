@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import User from '../models/user.model';
 import PutProfile from '../models/profileOperations.model';
-import CreateUser from '../models/userOperations.model';
+import { CreateUser, SearchUsers } from '../models/userOperations.model';
 import { NewBook, PutBook } from '../models/bookOperations.mode';
 import { verifyToken, getUserByToken } from '../utils/JWTAuthentication';
 import { uploadImageProfile, uploadImageBook, deleteImageBook } from './services/aws.service';
@@ -12,6 +12,7 @@ import { createBook, readBooks, updateBook, deleteBook, readBook } from './servi
 import { NewImageBook } from '../models/imageBookOperations.model';
 import { updateGeolocation, readGeolocation } from './services/geolocation.service';
 import { NewGeolocation } from '../models/geolocationOperations.model';
+import { readUsers } from './services/users.service';
 
 const routes = express.Router();
 const formData = multer();
@@ -163,6 +164,15 @@ routes.put('/geolocation', verifyToken, async (request, response) => {
     updateGeolocation(user, newGeolocation)
         .then(result => response.status(200).json(result))
         .catch(error => response.status(error.status).json(error));
+});
+
+/* Users */
+routes.get('/users', verifyToken, async (request, response) => {
+    const user: User = await getUserByToken(request, response);
+    const paramsSearchUsers: SearchUsers = request.query;
+
+    readUsers(user, paramsSearchUsers)
+        .then(result => response.status(200).json(result));
 });
 
 export default routes;

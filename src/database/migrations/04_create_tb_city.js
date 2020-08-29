@@ -1,7 +1,7 @@
 exports.up = function(knex) {
-    return knex.schema.createTable('tb_cidade', table => {
-        table.increments('cd_cidade').primary();
-        table.string('nm_cidade').notNullable();
+    return knex.schema.createTable('tb_city', table => {
+        table.increments('cd_city').primary();
+        table.string('nm_city').notNullable();
                 
         table.integer('cd_uf');
         

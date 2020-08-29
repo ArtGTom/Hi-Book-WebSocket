@@ -1,5 +1,6 @@
 import statusUserView from "./statusUserView.model";
 import { ViewGeolocation } from "./geolocationOperations.model";
+import { ViewCity } from "./cityOperations.model";
 
 export default interface Profile {
     user: string,
@@ -8,6 +9,7 @@ export default interface Profile {
     image: string,
     biography: string,
     phone: string,
+    city: ViewCity,
     status: statusUserView,
     geolocation: ViewGeolocation
 }

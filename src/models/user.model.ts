@@ -6,6 +6,7 @@ export default interface User {
     ds_biography: string,
     cd_phone_number: string,
     cd_user_icon_URL: string,
+    cd_city: number,
     cd_status_user: number,
     cd_geolocation: number
 }    

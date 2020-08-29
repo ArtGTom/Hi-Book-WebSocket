@@ -5,5 +5,9 @@ export default interface PutProfile {
     status?: number,
     image?: string,
     biography?: string,
+    city?: {
+        name?: string,
+        uf?: string
+    },
     phone?: string,
 }
