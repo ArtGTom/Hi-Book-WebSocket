@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { request, response } from 'express';
 import multer from 'multer';
 import User from '../models/user.model';
 import PutProfile from '../models/profileOperations.model';
@@ -13,6 +13,8 @@ import { NewImageBook } from '../models/imageBookOperations.model';
 import { updateGeolocation, readGeolocation } from './services/geolocation.service';
 import { NewGeolocation } from '../models/geolocationOperations.model';
 import { readUsers } from './services/users.service';
+import { NewExchange } from '../models/exchangeOperations.model';
+import { createExchange, readExchanges, addSecondBookInExchange, updateStatusExchange } from './services/exchange.service';
 
 const routes = express.Router();
 const formData = multer();
@@ -82,15 +84,7 @@ routes.get('/books', verifyToken, async (request, response) => {
 
     readBooks(user, ownerBook)
         .then(result => response.status(200).json(result))
-        .catch(error => response.status(error.staus).json(error));
-});
-
-routes.get('/books/:idBook', verifyToken, async (request, response) => {
-    const idBook = request.params['idBook']
-
-    readBook(idBook)
-        .then(result => response.status(200).json(result))
-        .catch(error => response.status(400).json(error));
+        .catch(error => response.status(error.staus || 400).json(error));
 });
 
 routes.post('/books', verifyToken, async (request, response) => {
@@ -102,6 +96,14 @@ routes.post('/books', verifyToken, async (request, response) => {
         .catch(err => response.status(400).json(err));
 });
 
+routes.get('/books/:idBook', verifyToken, async (request, response) => {
+    const idBook = request.params['idBook']
+
+    readBook(idBook)
+        .then(result => response.status(200).json(result))
+        .catch(error => response.status(400).json(error));
+});
+
 routes.put('/books/:idBook', verifyToken, async (request, response) => {
     const user: User = await getUserByToken(request, response);
     const idBook = request.params['idBook'];
@@ -109,7 +111,7 @@ routes.put('/books/:idBook', verifyToken, async (request, response) => {
 
     updateBook(user, idBook, putBook)
         .then(result => response.status(200).json(result))
-        .catch(error => response.status(error.status).json(error));
+        .catch(error => response.status(error.status || 400).json(error));
 });
 
 routes.delete('/books/:idBook', verifyToken, async (request, response) => {
@@ -118,7 +120,7 @@ routes.delete('/books/:idBook', verifyToken, async (request, response) => {
 
     deleteBook(user, idBook)
         .then(result => response.status(200).json(result))
-        .catch(error => response.status(error.status).json(error));
+        .catch(error => response.status(error.status || 400).json(error));
 });
 
 /* Images book */
@@ -134,7 +136,7 @@ routes.post('/books/:idBook/images', verifyToken, formData.single('image'), asyn
 
         uploadImageBook(user, idBook, newImageBook, image)
             .then(result => response.status(201).json(result))
-            .catch(error => response.status(error.status).json(error));
+            .catch(error => response.status(error.status || 400).json(error));
     } else
         response.status(400).json({ message: 'Descrição da imagem obrigatória' });
 });
@@ -146,7 +148,7 @@ routes.delete('/books/:idBook/images/:idImage', verifyToken, async (request, res
 
     deleteImageBook(user, idBook, idImage)
         .then(result => response.status(200).json(result))
-        .catch(error => response.status(error.status).json(error));
+        .catch(error => response.status(error.status || 400).json(error));
 });
 
 /* Geolocation */
@@ -163,7 +165,7 @@ routes.put('/geolocation', verifyToken, async (request, response) => {
 
     updateGeolocation(user, newGeolocation)
         .then(result => response.status(200).json(result))
-        .catch(error => response.status(error.status).json(error));
+        .catch(error => response.status(error.status || 400).json(error));
 });
 
 /* Users */
@@ -173,6 +175,44 @@ routes.get('/users', verifyToken, async (request, response) => {
 
     readUsers(user, paramsSearchUsers)
         .then(result => response.status(200).json(result));
+});
+
+/* Exchange */
+routes.post('/exchanges', async (request, response) => {
+    const user: User = await getUserByToken(request, response);
+    const newExchange: NewExchange = request.body;
+
+    createExchange(user, newExchange)
+        .then(result => response.status(201).json(result))
+        .catch(error => response.status(error.status || 400).json(error));
+});
+
+routes.get('/exchanges', async (request, response) => {
+    const user: User = await getUserByToken(request, response);
+    const paramStatus: {status?: 'pendente' | 'confirmada' | 'recusada' | 'concluida' | 'cancelada'} = request.query;
+    
+    readExchanges(user, paramStatus.status)
+        .then(result => response.status(200).json(result));
+});
+
+routes.post('/exchanges/:idExchange', async (request, response) => {
+    const user: User = await getUserByToken(request, response);
+    const idExchange: number = parseInt(request.params['idExchange']);
+    const requestedBookId: number = request.body.requestedBookId;
+    
+    addSecondBookInExchange(user, idExchange, requestedBookId)
+        .then(result => response.status(200).json(result))
+        .catch(error => response.status(error.status || 400).json(error));
+});
+
+routes.put('/exchanges/:idExchange', async (request, response) => {
+    const user: User = await getUserByToken(request, response);
+    const idExchange: number = parseInt(request.params['idExchange']);
+    const status: 'confirmar' | 'recusar' | 'concluir' | 'cancelar' = request.body.status;
+
+    updateStatusExchange(user, idExchange, status)
+        .then(result => response.status(200).json(result))
+        .catch(error => response.status(error.status || 400).json(error));
 });
 
 export default routes;

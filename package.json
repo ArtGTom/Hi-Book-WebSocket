@@ -1,6 +1,6 @@
 {
   "name": "hi-book-server",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "engines": {
     "node": "12.x",
     "npm": "6.x"
@@ -14,7 +14,7 @@
   "license": "MIT",
   "scripts": {
     "start": "tsnd --transpile-only --ignore-watch node_modules --respawn src/server.ts",
-    "deploy": "git add . && git commit -m \"Hi-book API - v1.7.0\" && git push heroku master",
+    "deploy": "git add . && git commit -m \"Hi-book API - v1.8.0\" && git push heroku master",
     "postinstall": "tsc",
     "knex:migrate": "knex --knexfile knexfile.ts migrate:latest --env production",
     "knex:migrate:rollback": "knex --knexfile knexfile.ts migrate:rollback --env production"

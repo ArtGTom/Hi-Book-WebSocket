@@ -1,6 +1,7 @@
 import db from "../database/connection";
 import statusUserView from "../models/statusUserView.model";
 import statusBookView from "../models/statusBookView.model";
+import { ViewStatusExchange } from "../models/statusExchangeView.model";
 
 export async function getStatusUserById(idStatus: number): Promise<statusUserView> {
 
@@ -23,6 +24,20 @@ export async function getStatusBookById(idStatus: number): Promise<statusBookVie
             .select('*')
             .where('sb.cd_status_book', '=', idStatus);
         const statusResponse: statusBookView = {
+            name: status[0].nm_status,
+            description: status[0].ds_status
+        }
+        resolve(statusResponse);
+    })
+}
+
+export async function getStatusExchangeById(idStatus: number): Promise<ViewStatusExchange> {
+    
+    return new Promise(async (resolve) => {
+        const status = await db('tb_status_exchange as se')
+            .select('*')
+            .where('se.cd_status_exchange', '=', idStatus);
+        const statusResponse: ViewStatusExchange = {
             name: status[0].nm_status,
             description: status[0].ds_status
         }
