@@ -11,6 +11,7 @@ import { ViewRoom } from '../models/roomOperations.model';
 
 export default function startWebSocket(app: any) {
     const httpServer = http.createServer(app);
+    
     const options = {
         origins: "*:*"
     };
@@ -160,6 +161,6 @@ export default function startWebSocket(app: any) {
             });
         });
     });
-
     httpServer.listen(4243);
+    console.log(httpServer.address());
 }
