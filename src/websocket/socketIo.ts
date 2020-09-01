@@ -161,6 +161,7 @@ export default function startWebSocket(app: any) {
             });
         });
     });
-    httpServer.listen(4243);
-    console.log(httpServer.address());
+    httpServer.listen(4243, () => {
+        console.log(`--------RODANDO NA PORTA ${4243}-------- `);
+    });
 }
