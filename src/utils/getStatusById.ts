@@ -18,7 +18,7 @@ export async function getStatusUserById(idStatus: number): Promise<statusUserVie
 }
 
 export async function getStatusBookById(idStatus: number): Promise<statusBookView> {
-    
+
     return new Promise(async (resolve) => {
         const status = await db('tb_status_book as sb')
             .select('*')
@@ -32,7 +32,7 @@ export async function getStatusBookById(idStatus: number): Promise<statusBookVie
 }
 
 export async function getStatusExchangeById(idStatus: number): Promise<ViewStatusExchange> {
-    
+
     return new Promise(async (resolve) => {
         const status = await db('tb_status_exchange as se')
             .select('*')

@@ -3,8 +3,8 @@ import PutProfile from '../../models/profileOperations.model'
 import User from '../../models/user.model';
 import db from '../../database/connection';
 import bCrypt from 'bcrypt';
-import { convertFromUser } from '../../utils/convertModelForJSON';
 import UF from '../../models/uf.model';
+import { convertFromUser } from '../../utils/convertModelToJSON';
 
 export async function readProfile(user: User) {
     return new Promise(async (resolve) => {
@@ -68,9 +68,9 @@ export async function updateProfile(user: User, updateUser: PutProfile) {
                     }
                 }
             }
-            if(updateUser.city?.uf != undefined && !updateUser.city.name)
+            if (updateUser.city?.uf != undefined && !updateUser.city.name)
                 reject({ message: 'Para alterar sua UF é necessário informar sua cidade' });
-                
+
         } catch (e) {
             reject({ message: 'Houve um erro ao atualizar suas informações. Tente novamente mais tarde. \nObs.: Indicamos renovar o token de autenticação' })
         }

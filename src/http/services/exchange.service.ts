@@ -1,9 +1,9 @@
 import User from "../../models/user.model";
-import { NewExchange, ViewExchange } from "../../models/exchangeOperations.model";
 import db from "../../database/connection";
 import Book from "../../models/book.model";
 import Exchange from "../../models/exchange.model";
-import { convertFromExchange } from "../../utils/convertModelForJSON";
+import { NewExchange, ViewExchange } from "../../models/exchangeOperations.model";
+import { convertFromExchange } from "../../utils/convertModelToJSON";
 
 export async function createExchange(user: User, newExchange: NewExchange) {
     return new Promise(async (resolve, reject) => {

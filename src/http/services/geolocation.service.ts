@@ -1,8 +1,8 @@
 import Geolocation from "../../models/geolocation.model";
-import { NewGeolocation } from "../../models/geolocationOperations.model";
 import db from '../../database/connection';
 import User from '../../models/user.model';
-import { convertFromGeolocation } from "../../utils/convertModelForJSON";
+import { NewGeolocation } from "../../models/geolocationOperations.model";
+import { convertFromGeolocation } from "../../utils/convertModelToJSON";
 
 export async function createGeolocation(user: User, newGeolocation: NewGeolocation) {
 
@@ -24,10 +24,10 @@ export async function createGeolocation(user: User, newGeolocation: NewGeolocati
 
         trx.commit()
             .then(() => {
-                resolve({message: 'Geolocalização cadastrada com sucesso'});
+                resolve({ message: 'Geolocalização cadastrada com sucesso' });
             })
             .catch(error => {
-                reject({message: 'Erro inesperado ao tentar cadastrar geoloalização. Tente novamente mais tarde', error});
+                reject({ message: 'Erro inesperado ao tentar cadastrar geoloalização. Tente novamente mais tarde', error });
                 console.error(error);
                 trx.rollback();
             });
@@ -64,7 +64,7 @@ export async function updateGeolocation(user: User, newGeolocation: NewGeolocati
                 resolve(convertFromGeolocation(geolocation[0]));
             })
             .catch(error => {
-                reject({message: 'Erro inesperado ao tentar atualizar geolocalização. Tente novamente mais tarde', error});
+                reject({ message: 'Erro inesperado ao tentar atualizar geolocalização. Tente novamente mais tarde', error });
                 console.error(error);
                 trx.rollback();
             });

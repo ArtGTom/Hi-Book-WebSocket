@@ -1,10 +1,10 @@
 import AWS from 'aws-sdk';
-import { PutObjectRequest } from 'aws-sdk/clients/s3';
 import User from '../../models/user.model';
 import db from '../../database/connection';
 import Book from '../../models/book.model';
-import { NewImageBook } from '../../models/imageBookOperations.model';
 import ImageBook from '../../models/imageBook.model';
+import { PutObjectRequest } from 'aws-sdk/clients/s3';
+import { NewImageBook } from '../../models/imageBookOperations.model';
 
 /* Instancia o service da AWS */
 const s3 = new AWS.S3();
@@ -163,11 +163,11 @@ export async function deleteImageBook(user: User, idBook: string, idImage: strin
                         .select('*')
                         .where('ib.cd_image_book', '=', idImage)
                         .andWhere('ib.cd_book', '=', idBook);
-                
+
                 const imageBook = imagesBook[0];
 
-                if(!imageBook)
-                    reject({message: 'Esta imagem não existe para este livro', status: 404});
+                if (!imageBook)
+                    reject({ message: 'Esta imagem não existe para este livro', status: 404 });
                 else {
                     s3.deleteObject(
                         {
@@ -180,7 +180,7 @@ export async function deleteImageBook(user: User, idBook: string, idImage: strin
                         .from('tb_image_book as ib')
                         .where('ib.cd_image_book', '=', imageBook.cd_image_book);
 
-                    resolve({message: 'Imagem deletada com sucesso!'});
+                    resolve({ message: 'Imagem deletada com sucesso!' });
                 }
             }
         }
@@ -188,18 +188,18 @@ export async function deleteImageBook(user: User, idBook: string, idImage: strin
 }
 
 function genNameFile(user: User, book: Book | null, qtdBook: string | null, type: string): string {
-            console.log(qtdBook);
-            if (book == null) {
-                const data = new Date()
-                const fileName: string =
-                    `profile-id-${user.cd_user}-${data.getDate()}-${data.getMonth()}-${data.getFullYear()}${type}`;
+    console.log(qtdBook);
+    if (book == null) {
+        const data = new Date()
+        const fileName: string =
+            `profile-id-${user.cd_user}-${data.getDate()}-${data.getMonth()}-${data.getFullYear()}${type}`;
 
-                return fileName;
-            } else {
-                const data = new Date()
-                const fileName: string =
-                    `book-id-${book.cd_book}-${data.getDate()}-${data.getMonth()}-${data.getFullYear()}-image-${qtdBook}-${type}`;
+        return fileName;
+    } else {
+        const data = new Date()
+        const fileName: string =
+            `book-id-${book.cd_book}-${data.getDate()}-${data.getMonth()}-${data.getFullYear()}-image-${qtdBook}-${type}`;
 
-                return fileName;
-            }
-        }
+        return fileName;
+    }
+}

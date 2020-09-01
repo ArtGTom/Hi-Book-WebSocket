@@ -2,6 +2,7 @@ exports.up = function(knex) {
     return knex.schema.createTable('tb_message', table => {
         table.increments('cd_message').primary();
         table.text('ds_message').notNullable();
+        table.timestamp('created_at').defaultTo(knex.fn.now());
         
         table.integer('cd_room').notNullable();
         table.integer('cd_user').notNullable();
